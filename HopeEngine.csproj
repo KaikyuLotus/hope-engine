@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{363F6D3E-2FFF-4AFE-8A74-CB575818D5B3}</ProjectGuid>
+    <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TemplateGuid>{9ef11e43-1701-4396-8835-8392d57abb70}</TemplateGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>HopeEngine</RootNamespace>
+    <AssemblyName>HopeEngine</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>True</Deterministic>
+    <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <AndroidUseLatestPlatformSdk>false</AndroidUseLatestPlatformSdk>
+    <TargetFrameworkVersion>v9.0</TargetFrameworkVersion>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>portable</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Mono.Android" />
+    <Reference Include="mscorlib" />
+    <Reference Include="OpenTK-1.0" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Xamarin.Essentials">
+      <HintPath>..\..\..\..\..\..\Microsoft\Xamarin\NuGet\xamarin.essentials\1.3.1\lib\monoandroid90\Xamarin.Essentials.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Engine\Hope.cs" />
+    <Compile Include="Engine\Objects\GameObject.cs" />
+    <Compile Include="Engine\Objects\Geometrics\Square.cs" />
+    <Compile Include="Engine\Objects\IGameObject.cs" />
+    <Compile Include="Engine\Objects\Text.cs" />
+    <Compile Include="Engine\Objects\TexturedRenderable.cs" />
+    <Compile Include="Engine\Objects\Transform.cs" />
+    <Compile Include="Engine\Scenes\IScene.cs" />
+    <Compile Include="Engine\Scenes\Scene.cs" />
+    <Compile Include="Engine\TextSystem\Glyph.cs" />
+    <Compile Include="Engine\TextSystem\HopeFont.cs" />
+    <Compile Include="Engine\TextSystem\TextRenderer.cs" />
+    <Compile Include="Engine\Textures\Texture.cs" />
+    <Compile Include="Engine\Utils\FileUtils.cs" />
+    <Compile Include="Engine\Views\GameView.cs" />
+    <Compile Include="Engine\Objects\BaseRenderable.cs" />
+    <Compile Include="Engine\HopeEngineView.cs" />
+    <Compile Include="Resources\Resource.designer.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Engine\Shaders\FragmentShader.cs" />
+    <Compile Include="Engine\Shaders\Shader.cs" />
+    <Compile Include="Engine\Shaders\ShaderProgram.cs" />
+    <Compile Include="Engine\Shaders\UniformLocation.cs" />
+    <Compile Include="Engine\Shaders\VertexShader.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidAsset Include="Assets\minimal.otf" />
+    <None Include="Resources\AboutResources.txt" />
+    <EmbeddedResource Include="Resources\shaders\basic_fragment.glsl" />
+    <EmbeddedResource Include="Resources\shaders\basic_vertex.glsl" />
+    <EmbeddedResource Include="Resources\shaders\textured_fragment.glsl" />
+    <EmbeddedResource Include="Resources\shaders\textured_vertex.glsl" />
+    <AndroidAsset Include="Assets\fonts\minimal.otf" />
+    <EmbeddedResource Include="Resources\shaders\text_vertex.glsl" />
+    <EmbeddedResource Include="Resources\shaders\text_fragment.glsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
+    <PackageReference Include="Xamarin.Forms">
+      <Version>4.7.0.1179</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\drawable\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\textures\sample.jpg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
