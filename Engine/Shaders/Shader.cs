@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Android.Util;
+using OpenTK.Graphics.ES30;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Android.Util;
-using OpenTK.Graphics.ES30;
 
 namespace HopeEngine.Engine.Shaders
 {
@@ -58,7 +58,7 @@ namespace HopeEngine.Engine.Shaders
         {
             Log.Info("Hope", $"Creating a new Shader from resources file named {fileName}");
 
-            var assembly = IntrospectionExtensions.GetTypeInfo(typeof(Shader)).Assembly;
+            Assembly assembly = IntrospectionExtensions.GetTypeInfo(typeof(Shader)).Assembly;
 
             using Stream stream = assembly.GetManifestResourceStream(fileName);
             using StreamReader reader = new StreamReader(stream);

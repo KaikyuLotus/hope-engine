@@ -9,6 +9,6 @@ uniform mat4 mvpMatrix;
 
 void main()
 {
-    gl_Position = mvpMatrix * vec4(aPos.x, aPos.y, 0.0, 1.0);
+    gl_Position = mvpMatrix * vec4(aPos.x * 10.0, aPos.y * 10.0, 0.0, 1.0);
     TexCoord = aTexCoord;
 }

@@ -8,38 +8,34 @@ namespace HopeEngine.Engine.TextSystem
     public static class TextRenderer
     {
 
-        private static readonly string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890?!|òèàùçé§ ><_-.:,;ì^'\"£$%&/()=[]{}\\~";
+        private static readonly string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890?!|òèàùçé§+ ><_-.:,;ì^'\"£$%&/()=[]{}\\~";
 
         public static HopeFont CreateHopeFont(Typeface typeface)
         {
             int bitmapWH = 1024;
-            
+
             int textSize = 160;
 
             // double scale = DeviceDisplay.MainDisplayInfo.Density;
-            Paint paint = new Paint(PaintFlags.AntiAlias)
+            Paint paint = new Paint(PaintFlags.AntiAlias | PaintFlags.Dither)
             {
                 Color = Color.White,
                 TextSize = textSize
             };
 
             paint.SetTypeface(typeface);
-            paint.SetShadowLayer(0.2f, 0f, 1f, Color.DarkGray);
+            paint.SetShadowLayer(0.4f, 0f, 1f, Color.DarkGray);
 
             // First create the canvas 1024x1024 with alpha
             Bitmap.Config bitmapConfig = Bitmap.Config.Argb8888;
             Bitmap bitmap = Bitmap.CreateBitmap(bitmapWH, bitmapWH, bitmapConfig);
             Canvas canvas = new Canvas(bitmap);
-            // canvas.DrawColor(Color.DarkGray);
 
             Dictionary<char, Glyph> glyphs = new Dictionary<char, Glyph>();
 
             FontMetrics metrics = paint.GetFontMetrics();
             float lineHeight = metrics.Bottom - metrics.Top;
             float ascent = metrics.Ascent;
-
-            Android.Util.Log.Debug("HopeA", "Ascent:      " + ascent);
-            Android.Util.Log.Debug("HopeA", "Line Height: " + lineHeight);
 
             List<char> missingChars = new List<char>();
             missingChars.AddRange(chars.ToCharArray());
@@ -68,12 +64,11 @@ namespace HopeEngine.Engine.TextSystem
                 float lastX = 0;
                 foreach (char c in currentChars.ToCharArray())
                 {
-                    var widths = new float[1];
+                    float[] widths = new float[1];
                     paint.GetTextWidths(c.ToString(), widths);
-                    var width = widths[0];
+                    float width = widths[0];
 
                     float relativeAscent = lineHeight + ascent + 5;
-                    Android.Util.Log.Debug("HopeA", "Relative ascent: " + relativeAscent);
 
                     float uvX = lastX / bitmapWH;
                     float uvY = (currentLineHeight + relativeAscent) / bitmapWH;

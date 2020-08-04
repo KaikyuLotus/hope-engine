@@ -41,7 +41,7 @@ namespace HopeEngine.Engine.Textures
         private static Bitmap ReverseBitmap(Bitmap src)
         {
             Android.Graphics.Matrix m = new Android.Graphics.Matrix();
-            m.PreScale(1, - 1);
+            m.PreScale(1, -1);
             Bitmap dst = Bitmap.CreateBitmap(src, 0, 0, src.Width, src.Height, m, false);
             dst.Density = (int)Android.Util.DisplayMetricsDensity.Default;
 

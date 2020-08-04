@@ -5,7 +5,7 @@ namespace HopeEngine.Engine.Objects.Geometrics
 {
     public class Square : TexturedRenderable
     {
-        private static float[] _vertices = new float[]{
+        public static readonly float[] Vertices = new float[]{
             0.0f, 0.0f, 0.0f,
             1.0f, 0.0f, 0.0f,
             0.0f, 1.0f, 0.0f,
@@ -13,7 +13,7 @@ namespace HopeEngine.Engine.Objects.Geometrics
             1.0f, 1.0f, 0.0f,
             1.0f, 0.0f, 0.0f
         };
-        private static float[] _uvs = new float[]{
+        public static readonly float[] Uvs = new float[]{
             0.0f, 1.0f,
             1.0f, 1.0f,
             0.0f, 0.0f,
@@ -23,7 +23,7 @@ namespace HopeEngine.Engine.Objects.Geometrics
 
         };
 
-        public Square(Texture texture, ShaderProgram shader = null) : base(shader ?? Hope.DefaultTexureShader, texture, _vertices, _uvs) { }
+        public Square(Texture texture, ShaderProgram shader = null) : base(shader ?? HopeShaders.DefaultTexureShader, texture, Vertices, Uvs) { }
 
     }
 }

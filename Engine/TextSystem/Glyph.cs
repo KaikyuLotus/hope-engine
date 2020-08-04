@@ -1,18 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Util;
-using Android.Views;
-using Android.Widget;
-
-namespace HopeEngine.Engine.TextSystem
+﻿namespace HopeEngine.Engine.TextSystem
 {
     public class Glyph
     {
@@ -25,11 +11,11 @@ namespace HopeEngine.Engine.TextSystem
 
         public Glyph(char chararcter, float x, float y, float width, float height)
         {
-            this.Chararcter = chararcter;
-            this.X = x;
-            this.Y = y;
-            this.Width = width;
-            this.Height = height;
+            Chararcter = chararcter;
+            X = x;
+            Y = y;
+            Width = width;
+            Height = height;
         }
 
         public float[] ToFloatArray()

@@ -1,15 +1,16 @@
 ﻿using Android.Content;
 using Android.Util;
-using HopeEngine.Engine.Views;
+using Android.Views;
+using HopeEngine.Engine.Objects;
+using HopeEngine.Engine.Scenes;
 using HopeEngine.Engine.Shaders;
+using HopeEngine.Engine.Shaders.Internal;
+using HopeEngine.Engine.Views;
 using OpenTK;
+using OpenTK.Graphics;
 using OpenTK.Graphics.ES30;
 using OpenTK.Platform.Android;
 using System;
-using HopeEngine.Engine.Objects;
-using HopeEngine.Engine.Scenes;
-using System.Diagnostics;
-using Android.Views;
 
 namespace HopeEngine.Engine
 {
@@ -17,34 +18,37 @@ namespace HopeEngine.Engine
     public class HopeEngineView : AndroidGameView
     {
 
-        private Scene scene;
+        public Action OnReady;
 
-        private Stopwatch stopwatch = new Stopwatch();
+        public Scene Scene { get; private set; }
 
         public HopeEngineView(Context context, Scene scene) : base(context)
         {
-            this.scene = scene;
+            Scene = scene;
         }
 
         public void ChangeScene(Scene scene)
         {
             // TODO do something like transitions ?
-            this.scene = scene;
-            this.scene.Setup();
+            Scene = scene;
+            Scene.Setup();
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            Run();
+            Run(240);
         }
 
         private void LoadStandardSettings()
         {
             try
             {
+                RenderOnUIThread = true;
                 // the default GraphicsMode that is set consists of (16, 16, 0, 0, 2, false)
                 Log.Debug("Hope", "Loading with default settings");
+                // GraphicsMode = new GraphicsMode(new ColorFormat(32), 24, 8, 4,);
+                GraphicsMode = new GraphicsMode(32, 24, 8, 4, 0, 1, true);
                 base.CreateFrameBuffer();
             }
             catch (Exception ex)
@@ -63,7 +67,7 @@ namespace HopeEngine.Engine
         protected override void CreateFrameBuffer()
         {
             Log.Info("Hope", "Creating frame buffer");
-            ContextRenderingApi = OpenTK.Graphics.GLVersion.ES3;
+            ContextRenderingApi = GLVersion.ES3;
             LoadStandardSettings();
 
             GL.Enable(EnableCap.Blend);
@@ -77,86 +81,87 @@ namespace HopeEngine.Engine
 
             // Will be removed
             Log.Info("Hope", "Creating Shader programs");
-            Hope.DefaultShader = new ShaderProgram(
+            HopeShaders.DefaultShader = new ShaderProgram(
                 VertexShader.FromResources("HopeEngine.Resources.shaders.basic_vertex.glsl"),
                 FragmentShader.FromResources("HopeEngine.Resources.shaders.basic_fragment.glsl")
             );
 
-            Hope.DefaultTexureShader = new ShaderProgram(
+            HopeShaders.DefaultTexureShader = new ShaderProgram(
                VertexShader.FromResources("HopeEngine.Resources.shaders.textured_vertex.glsl"),
                FragmentShader.FromResources("HopeEngine.Resources.shaders.textured_fragment.glsl")
             );
 
-            Hope.DefaultTextShader = new ShaderProgram(
-               VertexShader.FromResources("HopeEngine.Resources.shaders.text_vertex.glsl"),
-               FragmentShader.FromResources("HopeEngine.Resources.shaders.text_fragment.glsl")
+            HopeShaders.DefaultColorShader = new ShaderProgram(
+               VertexShader.FromResources("HopeEngine.Resources.shaders.colored_vertex.glsl"),
+               FragmentShader.FromResources("HopeEngine.Resources.shaders.colored_fragment.glsl")
             );
+
+            HopeShaders.DefaultTextShader = new TextShader();
 
             Hope.DefaultTypeface = Android.Graphics.Typeface.CreateFromAsset(Android.App.Application.Context.Assets, "minimal.otf");
 
+            Hope.EngineView = this;
+
+            if (OnReady != null)
+            {
+                OnReady.Invoke();
+            }
             // The first scene setup is called once the engine is ready
-            scene.Setup();
+            Scene.Setup();
         }
 
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
+            base.OnUpdateFrame(e);
+            Hope.FrameTime = e.Time;
             // Use this to update game objects
-            foreach (GameObject gameObject in scene.GameObjects)
+            foreach (GameObject gameObject in Scene.GameObjects)
             {
-                gameObject.Update();
+                gameObject.InternalUpdate();
             }
         }
 
         // This gets called on each frame render
         protected override void OnRenderFrame(FrameEventArgs e)
         {
-            stopwatch.Start();
+            base.OnRenderFrame(e);
             Clear();
 
-            foreach (GameObject gameObject in scene.GameObjects)
+            foreach (GameObject gameObject in Scene.GameObjects)
             {
-                gameObject.Render();
+                gameObject.InternalRender();
             }
 
             SwapBuffers();
-
-            // you only need to call this if you have delegates
-            // registered that you want to have called
-            base.OnRenderFrame(e);
-            Hope.FrameTime = stopwatch.ElapsedMilliseconds / 1000.0f;
-            stopwatch.Stop();
-            stopwatch.Reset();
         }
 
         public override bool OnTouchEvent(MotionEvent e)
         {
-            // TODO try to get a full screen canvas instead
-            int statusBarHeight = Resources.GetDimensionPixelSize(Resources.GetIdentifier("status_bar_height", "dimen", "android"));
             switch (e.Action)
             {
                 case MotionEventActions.Down:
                     // Finger down
-                    scene.GameObjects.ForEach((o) => o.OnFingerDown(e.RawX, e.RawY - statusBarHeight));
+                    foreach (GameObject gameObject in Scene.GameObjects)
+                    {
+                        gameObject.InternalOnFingerDown(e.RawX, e.RawY);
+                    }
                     break;
                 case MotionEventActions.Up:
                     // Finger up
-                    scene.GameObjects.ForEach((o) => o.OnFingerUp(e.RawX, e.RawY - statusBarHeight));
+                    foreach (GameObject gameObject in Scene.GameObjects)
+                    {
+                        gameObject.InternalOnFingerUp(e.RawX, e.RawY);
+                    }
                     break;
                 case MotionEventActions.Move:
                     // Finger move
-                    scene.GameObjects.ForEach((o) => o.OnFingerMove(e.RawX, e.RawY - statusBarHeight));
+                    foreach (GameObject gameObject in Scene.GameObjects)
+                    {
+                        gameObject.InternalOnFingerMove(e.RawX, e.RawY);
+                    }
                     break;
             }
             return true;
-        }
-
-        void CheckErrors()
-        {
-            ErrorCode errorCode = GL.GetErrorCode();
-            if (errorCode != ErrorCode.NoError)
-            {
-                throw new Exception(errorCode.ToString());
-            }
         }
 
     }

@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using Android.Graphics;
+using OpenTK;
 using OpenTK.Graphics.ES30;
 
 namespace HopeEngine.Engine.Shaders
@@ -24,6 +25,24 @@ namespace HopeEngine.Engine.Shaders
         public UniformLocation UniformVector3(Vector3 vector)
         {
             GL.Uniform3(Location, vector);
+            return this;
+        }
+
+        public UniformLocation UniformVector4(Vector4 vector)
+        {
+            GL.Uniform4(Location, vector);
+            return this;
+        }
+
+        public UniformLocation UniformColor(Color color)
+        {
+            GL.Uniform4(Location, new Vector4(color.R / 255.0f, color.G / 255.0f, color.B / 255.0f, color.A / 255.0f));
+            return this;
+        }
+
+        public UniformLocation UniformFloat(float value)
+        {
+            GL.Uniform1(Location, value);
             return this;
         }
 

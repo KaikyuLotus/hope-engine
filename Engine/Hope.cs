@@ -1,6 +1,5 @@
 ﻿using Android.Graphics;
 using HopeEngine.Engine.Views;
-using HopeEngine.Engine.Shaders;
 using OpenTK;
 using OpenTK.Graphics.ES30;
 using System;
@@ -12,20 +11,15 @@ namespace HopeEngine.Engine
 
         public static GameView DefaultView;
 
-        public static ShaderProgram DefaultShader;
-
-        public static ShaderProgram DefaultTexureShader;
-
-        public static ShaderProgram DefaultTextShader;
-
         public static Typeface DefaultTypeface;
 
         public static Color ClearColor = Color.Black;
 
-        public static float FrameTime = 0.0f;
+        public static double FrameTime = 0.0f;
 
         public static Vector2 ScreenSize;
 
+        public static HopeEngineView EngineView;
 
         public static void AssertNoGLError()
         {

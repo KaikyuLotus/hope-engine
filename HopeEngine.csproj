@@ -34,10 +34,11 @@
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>
+    </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
@@ -54,14 +55,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine\Hope.cs" />
+    <Compile Include="Engine\Objects\Component.cs" />
     <Compile Include="Engine\Objects\GameObject.cs" />
+    <Compile Include="Engine\Objects\UI\ColoredButton.cs" />
+    <Compile Include="Engine\Objects\UI\ColoredSquare.cs" />
     <Compile Include="Engine\Objects\Geometrics\Square.cs" />
     <Compile Include="Engine\Objects\IGameObject.cs" />
-    <Compile Include="Engine\Objects\Text.cs" />
+    <Compile Include="Engine\Objects\UI\Text.cs" />
     <Compile Include="Engine\Objects\TexturedRenderable.cs" />
     <Compile Include="Engine\Objects\Transform.cs" />
+    <Compile Include="Engine\Objects\UI\Button.cs" />
     <Compile Include="Engine\Scenes\IScene.cs" />
     <Compile Include="Engine\Scenes\Scene.cs" />
+    <Compile Include="Engine\Shaders\HopeShaders.cs" />
+    <Compile Include="Engine\Shaders\Internal\TextShader.cs" />
     <Compile Include="Engine\TextSystem\Glyph.cs" />
     <Compile Include="Engine\TextSystem\HopeFont.cs" />
     <Compile Include="Engine\TextSystem\TextRenderer.cs" />
@@ -85,9 +92,10 @@
     <EmbeddedResource Include="Resources\shaders\basic_vertex.glsl" />
     <EmbeddedResource Include="Resources\shaders\textured_fragment.glsl" />
     <EmbeddedResource Include="Resources\shaders\textured_vertex.glsl" />
-    <AndroidAsset Include="Assets\fonts\minimal.otf" />
     <EmbeddedResource Include="Resources\shaders\text_vertex.glsl" />
     <EmbeddedResource Include="Resources\shaders\text_fragment.glsl" />
+    <EmbeddedResource Include="Resources\shaders\colored_vertex.glsl" />
+    <EmbeddedResource Include="Resources\shaders\colored_fragment.glsl" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Android.Support.v7.AppCompat" Version="28.0.0.3" />
@@ -99,6 +107,7 @@
     <AndroidResource Include="Resources\values\strings.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Engine\NewFolder1\" />
     <Folder Include="Resources\drawable\" />
   </ItemGroup>
   <ItemGroup>

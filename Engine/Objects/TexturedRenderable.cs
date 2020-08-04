@@ -1,16 +1,20 @@
-﻿using System;
-using HopeEngine.Engine.Textures;
+﻿using Android.Util;
 using HopeEngine.Engine.Shaders;
+using HopeEngine.Engine.Textures;
 using OpenTK.Graphics.ES30;
+using System;
 
 namespace HopeEngine.Engine.Objects
 {
     public class TexturedRenderable : BaseRenderable
     {
 
-        private readonly float[] uvs;
-        private readonly int uvGroupSize;
-        private readonly Texture texture;
+        protected float[] uvs;
+        protected int uvGroupSize;
+        protected Texture texture;
+
+        protected int VBOv;
+        protected int VBOu;
 
         public TexturedRenderable(
             ShaderProgram shader, Texture texture,
@@ -22,31 +26,46 @@ namespace HopeEngine.Engine.Objects
             this.uvs = uvs;
             this.uvGroupSize = uvGroupSize;
             this.texture = texture;
+
         }
 
-        
+        public override void Prepare()
+        {
+            Log.Debug("Hope.TexturedRenderable.Prepare", "Preparing buffers...");
+            GL.GenVertexArrays(1, out VAO);
+            GL.GenBuffers(1, out VBOv);
+            GL.GenBuffers(1, out VBOu);
+            UpdateVAO();
+        }
+
+        public override void UpdateVAO()
+        {
+
+            GL.BindVertexArray(VAO);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VBOv);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(sizeof(float) * vertices.Length), vertices, BufferUsage.StaticDraw);
+            GL.VertexAttribPointer(0, groupSize, VertexAttribPointerType.Float, false, groupSize * sizeof(float), (IntPtr)0);
+            GL.EnableVertexAttribArray(0);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, VBOu);
+            GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(sizeof(float) * uvs.Length), uvs, BufferUsage.StaticDraw);
+            GL.VertexAttribPointer(1, uvGroupSize, VertexAttribPointerType.Float, false, uvGroupSize * sizeof(float), (IntPtr)0);
+            GL.EnableVertexAttribArray(1);
+
+            GL.BindBuffer(BufferTarget.ArrayBuffer, 0);
+            GL.BindVertexArray(0);
+        }
+
         public override void Render()
         {
             shader.Use();
-            GL.EnableVertexAttribArray(0);
-            GL.EnableVertexAttribArray(1);
-            unsafe
-            {
-                fixed (float* pvertices = vertices)
-                {
-                    GL.VertexAttribPointer(0, groupSize, VertexAttribPointerType.Float, false, 0, new IntPtr(pvertices));
-                };
-                fixed (float* puvs = uvs)
-                {
-                    GL.VertexAttribPointer(1, uvGroupSize, VertexAttribPointerType.Float, false, 0, new IntPtr(puvs));
-                };
-            };
             shader.GetUniformLocation("mvpMatrix").UniformMatrix4(Transform.CalculateModelMatrix() * View.ViewProjectionMatrix);
             texture.Bind();
 
-            GL.DrawArrays(this.beginMode, 0, vertices.Length);
-            GL.DisableVertexAttribArray(0);
-            GL.DisableVertexAttribArray(1);
+            GL.BindVertexArray(VAO);
+            GL.DrawArrays(beginMode, 0, vertices.Length / groupSize);
+            GL.BindVertexArray(0);
 
         }
     }

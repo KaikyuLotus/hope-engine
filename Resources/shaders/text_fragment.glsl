@@ -9,7 +9,7 @@ out vec4 FragColor;
 in vec2 TexCoord;
 
 uniform sampler2D BaseTexture;
-uniform vec3 ActualColor;
+uniform vec4 ActualColor;
 
 void main()
 {

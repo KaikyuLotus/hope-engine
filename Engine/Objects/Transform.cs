@@ -8,6 +8,13 @@ namespace HopeEngine.Engine.Objects
         public Vector3 Scale = new Vector3(1, 1, 0);
         public Vector3 Position = Vector3.Zero;
 
+        protected internal Vector3 ParentPosition = Vector3.Zero;
+
+        public Vector3 GetRelativePosition()
+        {
+            return Position + ParentPosition;
+        }
+
         public Matrix4 CalculateModelMatrix()
 
         {
@@ -15,7 +22,7 @@ namespace HopeEngine.Engine.Objects
                 * Matrix4.CreateRotationX(Rotation.X)
                 * Matrix4.CreateRotationY(Rotation.Y)
                 * Matrix4.CreateRotationZ(Rotation.Z)
-                * Matrix4.CreateTranslation(Position);
+                * Matrix4.CreateTranslation(GetRelativePosition());
         }
 
         /// <summary>
@@ -26,8 +33,8 @@ namespace HopeEngine.Engine.Objects
         /// <returns></returns>
         public bool IsInside2D(float x, float y)
         {
-            float minX = Position.X;
-            float minY = Position.Y;
+            float minX = GetRelativePosition().X;
+            float minY = GetRelativePosition().Y;
             float maxX = minX + Scale.X;
             float maxY = minY + Scale.Y;
             return (x >= minX && x <= maxX && y >= minY && y <= maxY);

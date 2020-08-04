@@ -1,5 +1,4 @@
-﻿using Android.Renderscripts;
-using Android.Util;
+﻿using Android.Util;
 using System.IO;
 using System.Reflection;
 
@@ -11,7 +10,7 @@ namespace HopeEngine.Engine.Utils
         {
             Log.Info("Hope", $"Reading resource file named {fileName}");
 
-            var assembly = IntrospectionExtensions.GetTypeInfo(assemblyType ?? typeof(FileUtils)).Assembly;
+            Assembly assembly = IntrospectionExtensions.GetTypeInfo(assemblyType ?? typeof(FileUtils)).Assembly;
 
             using Stream stream = assembly.GetManifestResourceStream(fileName);
             using MemoryStream ms = new MemoryStream();
